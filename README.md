@@ -23,7 +23,7 @@ Türkçe'ye çevirilmiştir. Orjinal readme: https://github.com/lissy93/personal
 ---
 ## Web Sitesi
 
-Kontrol listesini kullanmanın en kolay yolu web sitemiz üzerinden: **[digital-defense.io](https://digital-defense.io/)**
+Kontrol listesini kullanmanın en kolay yolu web sitemiz üzerinden: **[muysup.github.io/kisisel-guvenlik-kontrol-listesi](https://muysup.github.io/kisisel-guvenlik-kontrol-listesi/)**
 
 Burada listelere göz atabilir, tehdit modelinize göre filtreleyebilir ve tamamladıkça maddeleri işaretleyebilirsiniz (üstelik ilerlemeniz hakkında sizi iyi hissettirecek güzel grafikler de var ☺️).
 
