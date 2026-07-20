@@ -1,11 +1,26 @@
 import { component$, useContext } from '@builder.io/qwik';
-import { useLocation } from '@builder.io/qwik-city';
+import { useLocation, type StaticGenerateHandler } from '@builder.io/qwik-city';
 import { marked } from 'marked';
+import jsyaml from 'js-yaml';
+import { readFileSync, existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 import Icon from '~/components/core/icon';
 import { ChecklistContext } from '~/store/checklist-context';
-import type { Section } from "~/types/PSC";
+import type { Section, Sections } from "~/types/PSC";
 import Table from '~/components/psc/checklist-table';
+
+export const onStaticGenerate: StaticGenerateHandler = async () => {
+  const candidates = [
+    resolve(process.cwd(), "../personal-security-checklist.yml"),
+    resolve(process.cwd(), "personal-security-checklist.yml"),
+  ];
+  const yamlPath = candidates.find((path) => existsSync(path)) || candidates[0];
+  const sections = jsyaml.load(readFileSync(yamlPath, 'utf-8')) as Sections;
+  return {
+    params: sections.map((section) => ({ title: section.slug })),
+  };
+};
 
 export default component$(() => {
 
@@ -36,8 +51,8 @@ export default component$(() => {
 
       {section && section.softwareLinks && (
         <>
-        <div class="divider my-4">Useful Links</div>
-        <h3 class="text-xl my-2">Recommended Software</h3>
+        <div class="divider my-4">Faydalı Bağlantılar</div>
+        <h3 class="text-xl my-2">Önerilen Yazılımlar</h3>
           <ul class="list-disc pl-4">
           {section.softwareLinks.map((link, index) => (
             <li key={index}>

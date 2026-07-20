@@ -6,6 +6,7 @@ import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 export default defineConfig((): UserConfig => {
   return {
+    base: process.env.GH_PAGES ? "/kisisel-guvenlik-kontrol-listesi/" : "/",
     plugins: [
       qwikCity(),
       qwikVite(),

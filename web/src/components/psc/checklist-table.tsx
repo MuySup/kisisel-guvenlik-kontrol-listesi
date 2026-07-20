@@ -57,6 +57,18 @@ export default component$((props: { section: Section }) => {
   };
   
 
+  const priorityLabels: Record<string, string> = {
+    essential: 'Zorunlu',
+    optional: 'İsteğe Bağlı',
+    advanced: 'Gelişmiş',
+    basic: 'Temel',
+    recommended: 'Önerilen',
+  };
+
+  const translatePriority = (priority: Priority) => {
+    return priorityLabels[priority.toLocaleLowerCase()] || priority;
+  };
+
   const isChecked = (pointId: string) => {
     if (isIgnored(pointId)) return false;
     return completed.value[pointId] || false;
@@ -151,20 +163,20 @@ export default component$((props: { section: Section }) => {
       <div>
         <progress class="progress w-64" value={percent} max="100"></progress>
         <p class="text-xs text-center">
-          {done} out of {total} ({percent}%)
-          complete, {disabled} ignored</p>
+          {total} maddeden {done} tanesi tamamlandı ({percent}%),
+          {disabled} tanesi yok sayıldı</p>
       </div>
 
       <div class="flex flex-wrap gap-2 justify-end my-4">
         {(sortState.column || JSON.stringify(filterState) !== JSON.stringify(originalFilters)) && (
           <button class="btn btn-sm hover:btn-primary" onClick$={resetFilters}>
             <Icon width={18} height={16} icon="clear"/>
-            Reset Filters
+            Filtreleri Sıfırla
           </button>
         )}
         <button class="btn btn-sm hover:btn-primary" onClick$={() => { showFilters.value = !showFilters.value; }}>
           <Icon width={18} height={16} icon="filters"/>
-          {showFilters.value ? 'Hide' : 'Show'} Filters
+          Filtreleri {showFilters.value ? 'Gizle' : 'Göster'}
         </button>
       </div>
     </div>
@@ -174,28 +186,28 @@ export default component$((props: { section: Section }) => {
         style={{ opacity: stage.value === "enterTo" ? 1 : 0, height: stage.value === "enterTo" ? 'auto' : 0 }}> 
         {/* Filter by completion */}
         <div class="flex justify-end items-center gap-1">
-          <p class="font-bold text-sm">Show</p>
+          <p class="font-bold text-sm">Göster</p>
           <label onClick$={() => (filterState.show = 'all')}
             class="p-2 rounded hover:bg-front transition-all cursor-pointer flex gap-2">
-            <span class="text-sm">All</span> 
+            <span class="text-sm">Tümü</span>
             <input type="radio" name="show" class="radio radio-sm checked:radio-info" checked />
           </label>
           <label onClick$={() => (filterState.show = 'remaining')}
             class="p-2 rounded hover:bg-front transition-all cursor-pointer flex gap-2">
-            <span class="text-sm">Remaining</span> 
+            <span class="text-sm">Kalanlar</span>
             <input type="radio" name="show" class="radio radio-sm checked:radio-error" />
           </label>
           <label onClick$={() => (filterState.show = 'completed')}
             class="p-2 rounded hover:bg-front transition-all cursor-pointer flex gap-2">
-            <span class="text-sm">Completed</span> 
+            <span class="text-sm">Tamamlananlar</span>
             <input type="radio" name="show" class="radio radio-sm checked:radio-success" />
           </label>
         </div>
         {/* Filter by level */}
         <div class="flex justify-end items-center gap-1">
-          <p class="font-bold text-sm">Filter</p>
+          <p class="font-bold text-sm">Filtrele</p>
           <label class="p-2 rounded hover:bg-front transition-all cursor-pointer flex gap-2">
-            <span class="text-sm">Basic</span> 
+            <span class="text-sm">Temel</span>
             <input
               type="checkbox"
               checked={filterState.levels.essential}
@@ -204,7 +216,7 @@ export default component$((props: { section: Section }) => {
             />
           </label>
           <label class="p-2 rounded hover:bg-front transition-all cursor-pointer flex gap-2">
-            <span class="text-sm">Optional</span> 
+            <span class="text-sm">İsteğe Bağlı</span>
             <input
               type="checkbox"
               checked={filterState.levels.optional}
@@ -214,7 +226,7 @@ export default component$((props: { section: Section }) => {
           </label>
           <label
             class="p-2 rounded hover:bg-front transition-all cursor-pointer flex gap-2">
-            <span class="text-sm">Advanced</span> 
+            <span class="text-sm">Gelişmiş</span>
             <input
               type="checkbox"
               checked={filterState.levels.advanced}
@@ -230,9 +242,9 @@ export default component$((props: { section: Section }) => {
       <thead>
         <tr>
           { [
-            { id: 'done', text: 'Done?'},
-            { id: 'advice', text: 'Advice' },
-            { id: 'level', text: 'Level' }
+            { id: 'done', text: 'Tamam mı?'},
+            { id: 'advice', text: 'Tavsiye' },
+            { id: 'level', text: 'Seviye' }
           ].map((item) => (
             <th
               key={item.id}
@@ -245,7 +257,7 @@ export default component$((props: { section: Section }) => {
               </span>
             </th>
           ))}
-          <th>Details</th>
+          <th>Detaylar</th>
         </tr>
       </thead>
       <tbody>
@@ -274,7 +286,7 @@ export default component$((props: { section: Section }) => {
                     setCompleted(data);
                   }}
                 />
-                <label for={`ignore-${itemId}`} class="text-small block opacity-50 mt-2">Ignore</label>
+                <label for={`ignore-${itemId}`} class="text-small block opacity-50 mt-2">Yok Say</label>
                 <input
                   type="checkbox"
                   id={`ignore-${itemId}`}
@@ -299,8 +311,8 @@ export default component$((props: { section: Section }) => {
                 </label>
               </td>
               <td>
-                <div class={`badge gap-2 badge-${badgeColor}`}>
-                  {item.priority}
+                <div class={`badge gap-2 badge-${badgeColor} h-auto whitespace-nowrap py-2.5`}>
+                  {translatePriority(item.priority)}
                 </div>
               </td>
               <td class={styles.checklistItemDescription} dangerouslySetInnerHTML={parseMarkdown(item.details)}></td>

@@ -262,7 +262,7 @@ export default component$(() => {
               },
               tooltip: {
                 callbacks: {
-                  label: (ctx) => `Completed ${Math.round(ctx.parsed.r)}% of ${ctx.dataset.label || ''} items`,
+                  label: (ctx) => `${ctx.dataset.label || ''} maddelerin %${Math.round(ctx.parsed.r)}'i tamamlandı`,
                 }
               }
             },
@@ -274,9 +274,9 @@ export default component$(() => {
   }));
 
   const items = [
-    { id: 'essential-container', label: 'Essential' },
-    { id: 'optional-container', label: 'Optional' },
-    { id: 'advanced-container', label: 'Advanced' },
+    { id: 'essential-container', label: 'Zorunlu' },
+    { id: 'optional-container', label: 'İsteğe Bağlı' },
+    { id: 'advanced-container', label: 'Gelişmiş' },
   ];
 
   // Beware, some god-awful markup ahead (thank Tailwind for that!)
@@ -290,19 +290,19 @@ export default component$(() => {
         <button
           class="absolute top-1 right-1 btn btn-sm opacity-50"
           onClick$={() => setIgnoreDialog(true)}
-          >Close</button>
-        <p class="text-xl block text-center font-bold">No stats yet</p>
-        <p class="w-md text-left my-2">You'll see your progress here, once you start ticking items off the checklists</p>
-        <p class="w-md text-left my-2">Get started, by selecting a checklist below</p>
+          >Kapat</button>
+        <p class="text-xl block text-center font-bold">Henüz istatistik yok</p>
+        <p class="w-md text-left my-2">Kontrol listelerindeki maddeleri işaretlemeye başladığınızda ilerlemenizi burada göreceksiniz</p>
+        <p class="w-md text-left my-2">Aşağıdan bir kontrol listesi seçerek başlayın</p>
       </div>
     )}
 
     <div class="flex justify-center flex-col items-center gap-6">
       {/* Progress Percent */}
       <div class="rounded-box bg-front shadow-md w-96 p-4">
-        <h3 class="text-primary text-2xl">Your Progress</h3>
+        <h3 class="text-primary text-2xl">İlerlemeniz</h3>
         <p class="text-lg">
-          You've completed <b>{totalProgress.value.completed} out of {totalProgress.value.outOf}</b> items
+          <b>{totalProgress.value.outOf}</b> maddeden <b>{totalProgress.value.completed}</b> tanesini tamamladınız
         </p>
         <progress
           class="progress w-80"
@@ -326,12 +326,12 @@ export default component$(() => {
       {/* Something ??? */}
       <div class="p-4 rounded-box bg-front shadow-md w-96 flex-grow">
         <p class="text-sm opacity-80 mb-2">
-          Next up, consider switching to more secure and
-          privacy-respecting apps and services.
+          Sırada, daha güvenli ve gizliliğe saygılı
+          uygulamalara ve hizmetlere geçmeyi düşünün.
         </p>
         <p class="text-lg">
-          View our directory of recommended software,
-          at <a class="link link-secondary font-bold" href="https://awesome-privacy.xyz">awesome-privacy.xyz</a>
+          Önerilen yazılımlar dizinimizi
+          şurada görüntüleyin: <a class="link link-secondary font-bold" href="https://awesome-privacy.xyz">awesome-privacy.xyz</a>
         </p>
       </div>
     </div>
@@ -353,7 +353,7 @@ export default component$(() => {
                     'my-2 w-80 flex justify-between items-center tooltip transition',
                     `hover:text-${section.color}-400`
                   ]}
-                  data-tip={`Completed ${sectionCompletion.value[index]}% of ${section.checklist.length} items.`}
+                  data-tip={`${section.checklist.length} maddenin %${sectionCompletion.value[index]}'i tamamlandı.`}
                 >
                 <p class="text-sm m-0 flex items-center text-left gap-1 text-nowrap overflow-hidden max-w-40">
                   <Icon icon={section.icon} width={14} />

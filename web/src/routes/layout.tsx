@@ -1,18 +1,33 @@
 import { component$, useContextProvider, Slot } from "@builder.io/qwik";
 import { routeLoader$, type RequestHandler } from "@builder.io/qwik-city";
 import jsyaml from "js-yaml";
+import { readFileSync, existsSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, resolve } from "node:path";
 
 import Navbar from "~/components/furniture/nav";
 import Footer from "~/components/furniture/footer";
 import { ChecklistContext } from "~/store/checklist-context";
 import type { Sections } from "~/types/PSC";
 
+const currentDir = dirname(fileURLToPath(import.meta.url));
+
+const findYamlPath = (): string => {
+  const candidates = [
+    resolve(process.cwd(), "../personal-security-checklist.yml"),
+    resolve(process.cwd(), "personal-security-checklist.yml"),
+    resolve(currentDir, "../../../personal-security-checklist.yml"),
+  ];
+  return candidates.find((path) => existsSync(path)) || candidates[0];
+};
+
 export const useChecklists = routeLoader$(async () => {
-  const remoteUrl = 'https://raw.githubusercontent.com/Lissy93/personal-security-checklist/HEAD/personal-security-checklist.yml';
-  return fetch(remoteUrl)
-    .then((res) => res.text())
-    .then((res) => jsyaml.load(res) as Sections)
-    .catch(() => []);
+  try {
+    const yamlText = readFileSync(findYamlPath(), "utf-8");
+    return jsyaml.load(yamlText) as Sections;
+  } catch {
+    return [];
+  }
 });
 
 export const onGet: RequestHandler = async ({ cacheControl }) => {

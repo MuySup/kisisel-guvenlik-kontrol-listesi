@@ -12,7 +12,7 @@ export default extendConfig(baseConfig, () => {
     },
     plugins: [
       staticAdapter({
-        origin: "https://yoursite.qwik.dev",
+        origin: "https://muysup.github.io/kisisel-guvenlik-kontrol-listesi",
       }),
     ],
   };
