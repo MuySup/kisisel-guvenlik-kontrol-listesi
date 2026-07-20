@@ -5,6 +5,7 @@ import { useLocalStorage } from "~/hooks/useLocalStorage";
 import { ChecklistContext } from "~/store/checklist-context";
 import type { Priority, Sections, Section } from '~/types/PSC';
 import Icon from '~/components/core/icon';
+import { withBase } from '~/utils/base-url';
 
 /**
  * Component for client-side user progress metrics.
@@ -197,12 +198,21 @@ export default component$(() => {
       return progress.outOf > 0 ? (progress.completed / progress.outOf) * 100 : 0;
     };
   
+    // Turkish labels for each priority level
+    const priorityLabels: Record<string, string> = {
+      essential: 'Zorunlu',
+      optional: 'İsteğe Bağlı',
+      advanced: 'Gelişmiş',
+      basic: 'Temel',
+      recommended: 'Önerilen',
+    };
+
     // Asynchronously build data for each priority level
     const buildDataForPriority = (priority: Priority, color: string) => {
       return Promise.all(sections.map(section => calculatePercentage(section, priority)))
         .then(data => ({
           ...datasetTemplate,
-          label: priority.charAt(0).toUpperCase() + priority.slice(1),
+          label: priorityLabels[priority.toLowerCase()] || priority,
           data: data,
           backgroundColor: color,
         }));
@@ -348,7 +358,7 @@ export default component$(() => {
           { checklists.value.map((section: Section, index: number) => (
               <li key={index}>
                 <a
-                  href={`/checklist/${section.slug}`}
+                  href={withBase(`/checklist/${section.slug}`)}
                   class={[
                     'my-2 w-80 flex justify-between items-center tooltip transition',
                     `hover:text-${section.color}-400`

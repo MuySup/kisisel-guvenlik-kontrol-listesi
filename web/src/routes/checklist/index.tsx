@@ -4,6 +4,7 @@ import { ChecklistContext } from '~/store/checklist-context';
 import { useLocalStorage } from "~/hooks/useLocalStorage";
 import { useChecklist } from '~/store/local-checklist-store';
 import type { Section } from "~/types/PSC";
+import { withBase } from '~/utils/base-url';
 
 export default component$(() => {
   const checklists = useContext(ChecklistContext);
@@ -45,7 +46,7 @@ export default component$(() => {
               })
               }
               <div class="card-actions justify-end">
-                <a href={`/checklist/${section.slug}`}>
+                <a href={withBase(`/checklist/${section.slug}`)}>
                   <button class={`btn text-base-100 bg-${section.color}-400 hover:bg-${section.color}-600`}>
                     Tüm Kontrol Listesini Görüntüle ➜
                   </button>

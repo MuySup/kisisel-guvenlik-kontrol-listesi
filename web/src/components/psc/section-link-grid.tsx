@@ -4,6 +4,7 @@ import { useLocalStorage } from "~/hooks/useLocalStorage";
 import type { Checklist, Section } from '~/types/PSC';
 import Icon from '~/components/core/icon';
 import styles from './psc.module.css';
+import { withBase } from '~/utils/base-url';
 
 export default component$((props: { sections: Section[] }) => {
 
@@ -46,7 +47,7 @@ export default component$((props: { sections: Section[] }) => {
       'transition-all', 'max-w-6xl w-full']}>
       {props.sections.map((section: Section, index: number) => (                   
         <a key={section.slug}
-          href={`/checklist/${section.slug}`}
+          href={withBase(`/checklist/${section.slug}`)}
           class={[
             'card card-side bg-front bg-opacity-25 shadow-md transition-all px-2',
             `outline-offset-2 outline-${section.color}-400`,
@@ -58,11 +59,11 @@ export default component$((props: { sections: Section[] }) => {
             <Icon icon={section.icon || 'star'} color={section.color} />
             {(done.value && done.value[index]) ? (
               <p class={`text-${section.color}-400 pt-2 pb-0 px-0 mx-0 my-0`}>
-                {done.value[index]}/{section.checklist.length} Done
+                {done.value[index]}/{section.checklist.length} Tamamlandı
               </p>
             ) : (
               <p class={`text-${section.color}-400 pt-2 pb-0 px-0 mx-0 my-0`}>
-                {section.checklist.length} Items
+                {section.checklist.length} Madde
               </p>
             )}
           </div>
@@ -80,7 +81,7 @@ export default component$((props: { sections: Section[] }) => {
               </div>
             ) : (
               <span class="absolute right-2 top-2 opacity-30 text-xs">
-                Not yet started
+                Henüz başlanmadı
               </span>
             )}
           </div>
